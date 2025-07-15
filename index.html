@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tratamiento Contable y Fiscal de Alimentación a Empleados</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Estilos generales y de la estructura, conservados del original */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f1f5f9; /* slate-100 */
+        }
+
+        .main-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Barra de navegación lateral */
+        .sidebar {
+            width: 280px;
+            background-color: #ffffff;
+            transition: width 0.3s ease;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-header {
+            text-align: center;
+            padding: 2rem 1rem;
+            flex-shrink: 0;
+        }
+
+        .sidebar-logo {
+            max-width: 150px;
+            margin: 0 auto;
+        }
+
+        .nav-links-container {
+            flex-grow: 1;
+            background-color: #1e293b; /* slate-800 */
+            color: #cbd5e1; /* slate-300 */
+            padding: 1rem;
+            border-top-right-radius: 1.5rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 0.5rem;
+            transition: background-color 0.2s, color 0.2s;
+            cursor: pointer;
+            font-weight: 500;
+            color: #cbd5e1;
+        }
+
+        .nav-link:hover {
+            background-color: #334155; /* slate-700 */
+            color: #ffffff;
+        }
+
+        .nav-link.active {
+            background-color: #01a90a;
+            color: #ffffff;
+            font-weight: 600;
+        }
+        
+        .nav-link.active .nav-icon {
+            color: #ffffff;
+        }
+
+        .nav-icon {
+            margin-right: 0.75rem;
+            width: 20px;
+            text-align: center;
+            color: #94a3b8; /* slate-400 */
+        }
+
+        /* Contenido principal */
+        .main-content {
+            flex-grow: 1;
+            padding: 1rem;
+            overflow-y: auto;
+        }
+
+        .slide {
+            display: none;
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            overflow: hidden;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        .slide.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Estilos de diapositivas adaptados */
+        .slide-container {
+            width: 100%;
+            min-height: 720px;
+            background-color: #f8fafc;
+            position: relative;
+            padding-bottom: 90px;
+        }
+        
+        .top-bar-decoration {
+            width: 100%;
+            height: 1.25rem;
+            background-color: #18391a;
+        }
+
+        .slide-footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 80px;
+            display: flex;
+        }
+        .footer-logo-area {
+            width: 160px;
+            flex-shrink: 0;
+            background-color: #f8fafc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .footer-logo-img {
+            height: 72px;
+            width: auto;
+            object-fit: contain;
+        }
+        .footer-bar {
+            flex-grow: 1;
+            background-color: #18391a;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 0 1.5rem;
+            color: white;
+            border-top-left-radius: 40px;
+        }
+
+        .title-accent {
+            height: 4px;
+            width: 100px;
+            background-color: #01a90a;
+        }
+        
+        /* Estilos de componentes visuales */
+        .info-icon {
+            background-color: rgba(232, 255, 232, 0.7);
+            height: 80px; width: 80px; border-radius: 50%; display: flex;
+            align-items: center; justify-content: center; margin: 0 15px;
+        }
+        .agenda-item {
+            transition: transform 0.2s; cursor: pointer; border-left: 4px solid transparent;
+        }
+        .agenda-item:hover {
+            transform: translateX(5px); border-left: 4px solid #01a90a; background-color: #f0fff0;
+        }
+        .number-circle {
+            display: flex; justify-content: center; align-items: center; width: 28px; height: 28px;
+            border-radius: 50%; background-color: #01a90a; color: white; font-weight: bold; margin-right: 10px;
+        }
+        .icon-circle {
+            display: flex; justify-content: center; align-items: center; width: 48px; height: 48px;
+            border-radius: 50%; background-color: #e6ffe6; color: #18391a;
+        }
+        .concept-card {
+            border-left: 4px solid #01a90a; transition: transform 0.2s;
+        }
+        .concept-card:hover {
+            transform: translateY(-5px); box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+        .table-header {
+            background-color: #18391a; color: white;
+        }
+        
+        /* Media query para pantallas pequeñas */
+        @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                height: auto;
+            }
+            .nav-links-container {
+                border-top-right-radius: 0;
+            }
+            .nav-link {
+                justify-content: center;
+            }
+            .nav-link span {
+                display: none;
+            }
+             .main-content {
+                padding: 0.5rem;
+            }
+            .footer-bar {
+                font-size: 0.65rem;
+                padding: 0 1rem;
+                flex-direction: column;
+                align-items: flex-start;
+                justify-content: center;
+                border-top-left-radius: 20px;
+            }
+             .footer-logo-area {
+                width: 120px;
+             }
+             .footer-logo-img {
+                height: 60px;
+             }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main-container">
+        <!-- Barra de Navegación Lateral -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <!-- Ruta del logo corregida -->
+                <img src="Logo GESCONT transparencia.png" alt="Logo de GESCONT" class="sidebar-logo">
+            </div>
+            <div class="nav-links-container">
+                <a class="nav-link" data-slide="slide-1">
+                    <i class="fas fa-home nav-icon"></i>
+                    <span>Portada</span>
+                </a>
+                <a class="nav-link" data-slide="slide-2">
+                    <i class="fas fa-list-ul nav-icon"></i>
+                    <span>Agenda</span>
+                </a>
+                <a class="nav-link" data-slide="slide-3">
+                    <i class="fas fa-balance-scale nav-icon"></i>
+                    <span>Impuesto de Renta</span>
+                </a>
+                <a class="nav-link" data-slide="slide-4">
+                    <i class="fas fa-percentage nav-icon"></i>
+                    <span>Impuesto al Valor Agregado (IVA)</span>
+                </a>
+                <a class="nav-link" data-slide="slide-5">
+                    <i class="fas fa-file-invoice nav-icon"></i>
+                    <span>Obligación de Facturar</span>
+                </a>
+                <a class="nav-link" data-slide="slide-6">
+                    <i class="fas fa-chart-line nav-icon"></i>
+                    <span>Naturaleza del Ingreso</span>
+                </a>
+                <a class="nav-link" data-slide="slide-7">
+                    <i class="fas fa-cogs nav-icon"></i>
+                    <span>Ciclo Contable</span>
+                </a>
+                <a class="nav-link" data-slide="slide-8">
+                    <i class="fas fa-calculator nav-icon"></i>
+                    <span>Ejercicio práctico</span>
+                </a>
+                <a class="nav-link" data-slide="slide-9">
+                    <i class="fas fa-check-circle nav-icon"></i>
+                    <span>Conclusiones</span>
+                </a>
+            </div>
+        </nav>
+
+        <!-- Contenedor Principal del Contenido -->
+        <main class="main-content">
+
+            <!-- Diapositiva 1: Portada -->
+            <div id="slide-1" class="slide active">
+                <div class="slide-container flex flex-col">
+                    <div class="top-bar-decoration"></div>
+                    <div class="flex flex-col items-center justify-center flex-grow px-12 py-10">
+                        <div class="flex justify-center mb-6">
+                            <div class="info-icon shadow-md"><i class="fas fa-utensils" style="color: #01a90a; font-size: 2.25rem;"></i></div>
+                            <div class="info-icon shadow-md"><i class="fas fa-calculator" style="color: #01a90a; font-size: 2.25rem;"></i></div>
+                            <div class="info-icon shadow-md"><i class="fas fa-receipt" style="color: #01a90a; font-size: 2.25rem;"></i></div>
+                        </div>
+                        <h1 class="text-4xl md:text-5xl font-bold text-center mb-4 text-gray-800">Tratamiento Fiscal y Contable de la Alimentación a Empleados</h1>
+                        <div class="title-accent mx-auto my-4"></div>
+                        <p class="text-lg md:text-xl text-gray-600 text-center mt-6 max-w-4xl">Guía sobre la deducibilidad, manejo del IVA, facturación y registro contable del suministro de alimentos a trabajadores en Colombia.</p>
+                        <div class="mt-8 mb-20 flex justify-center">
+                            <div class="p-4 rounded-lg shadow-lg border" style="background-color: #f0fff0; border-color: #c1e7c1;">
+                                <div class="grid grid-cols-3 gap-6">
+                                    <div class="text-center p-3"><i class="fas fa-balance-scale-right mb-2" style="color: #01a90a; font-size: 2.25rem;"></i><p class="text-gray-700">Fiscal</p></div>
+                                    <div class="text-center p-3"><i class="fas fa-book-open mb-2" style="color: #01a90a; font-size: 2.25rem;"></i><p class="text-gray-700">Contable</p></div>
+                                    <div class="text-center p-3"><i class="fas fa-file-invoice-dollar mb-2" style="color: #01a90a; font-size: 2.25rem;"></i><p class="text-gray-700">Facturación</p></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slide-footer">
+                        <div class="footer-logo-area">
+                            <img src="Logo GESCONT transparencia.png" alt="Logo GESCONT" class="footer-logo-img">
+                        </div>
+                        <div class="footer-bar">
+                            <div class="text-xs md:text-sm">
+                                <p class="font-semibold">Elaborado por: 👨🏽‍💻 CP. AUGUSTO CÁRDENAS 📧augustoccardenas@gmail.com ☎️ 321 8168328</p>
+                                <p>Informe generado para Colfrutas S.A.S. | Análisis basado en la normativa vigente.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Diapositiva 2: Agenda - MODIFICADA -->
+            <div id="slide-2" class="slide">
+                <div class="slide-container flex flex-col">
+                    <div class="top-bar-decoration"></div>
+                    <div class="flex flex-col px-8 md:px-16 py-8 flex-grow">
+                        <div class="mb-6">
+                            <h1 class="text-4xl font-bold" style="color: #18391a;">Agenda</h1>
+                            <div class="title-accent my-2"></div>
+                            <p class="text-lg text-gray-600 mt-1">Temas clave para la correcta gestión de la alimentación a empleados.</p>
+                        </div>
+                        <div class="flex flex-col md:flex-row justify-between mt-2">
+                            <div class="w-full md:w-1/2 md:pr-6 space-y-3">
+                                <div class="agenda-item flex items-center p-3 rounded-md shadow-sm"><div class="number-circle">1</div><div class="icon-circle"><i class="fas fa-balance-scale text-lg"></i></div><span class="text-lg font-medium text-gray-800">Impuesto de Renta</span></div>
+                                <div class="agenda-item flex items-center p-3 rounded-md shadow-sm"><div class="number-circle">2</div><div class="icon-circle"><i class="fas fa-percentage text-lg"></i></div><span class="text-lg font-medium text-gray-800">Impuesto al Valor Agregado (IVA)</span></div>
+                                <div class="agenda-item flex items-center p-3 rounded-md shadow-sm"><div class="number-circle">3</div><div class="icon-circle"><i class="fas fa-file-invoice text-lg"></i></div><span class="text-lg font-medium text-gray-800">Obligación de Facturar</span></div>
+                                <div class="agenda-item flex items-center p-3 rounded-md shadow-sm"><div class="number-circle">4</div><div class="icon-circle"><i class="fas fa-chart-line text-lg"></i></div><span class="text-lg font-medium text-gray-800">Naturaleza del Ingreso</span></div>
+                            </div>
+                            <div class="w-full md:w-1/2 md:pl-6 space-y-3 mt-3 md:mt-0">
+                                <div class="agenda-item flex items-center p-3 rounded-md shadow-sm"><div class="number-circle">5</div><div class="icon-circle"><i class="fas fa-cogs text-lg"></i></div><span class="text-lg font-medium text-gray-800">Ciclo Contable</span></div>
+                                <div class="agenda-item flex items-center p-3 rounded-md shadow-sm"><div class="number-circle">6</div><div class="icon-circle"><i class="fas fa-calculator text-lg"></i></div><span class="text-lg font-medium text-gray-800">Ejercicio práctico</span></div>
+                                <div class="agenda-item flex items-center p-3 rounded-md shadow-sm"><div class="number-circle">7</div><div class="icon-circle"><i class="fas fa-check-circle text-lg"></i></div><span class="text-lg font-medium text-gray-800">Conclusiones y Recomendaciones</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slide-footer">
+                        <div class="footer-logo-area">
+                            <img src="Logo GESCONT transparencia.png" alt="Logo GESCONT" class="footer-logo-img">
+                        </div>
+                        <div class="footer-bar">
+                           <div class="text-xs md:text-sm">
+                                <p class="font-semibold">Elaborado por:  🏽‍💻 CP. AUGUSTO CÁRDENAS 📧augustoccardenas@gmail.com ☎️ 321 8168328</p>
+                                <p>Informe generado para Colfrutas S.A.S. | Análisis basado en la normativa vigente.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Diapositiva 3: Impuesto de Renta -->
+            <div id="slide-3" class="slide">
+                 <div class="slide-container flex flex-col">
+                    <div class="top-bar-decoration"></div>
+                    <div class="flex flex-col px-8 md:px-16 py-8 flex-grow">
+                        <div class="mb-4"><h1 class="text-4xl font-bold" style="color: #18391a;">Impuesto de Renta: Deducibilidad</h1><div class="title-accent my-2"></div></div>
+                        <div class="flex flex-col md:flex-row justify-between gap-8">
+                            <div class="w-full md:w-1/2">
+                                <div class="concept-card bg-white p-4 rounded shadow-sm mb-4"><div class="flex items-start"><div class="icon-circle mr-3 mt-1"><i class="fas fa-check-double text-2xl" style="color: #01a90a;"></i></div><div><h3 class="text-xl font-semibold" style="color: #18391a;">¿Es deducible el costo?</h3><p class="text-gray-700 mt-1">Sí, los costos en que incurre la empresa para suministrar alimentación a sus empleados son 100% deducibles en el impuesto de renta, ya que se consideran un gasto necesario y relacionado con la actividad productora de renta.</p><p class="text-xs text-gray-500 mt-1 italic">Sustento: Art. 107, Estatuto Tributario.</p></div></div></div>
+                                <div class="bg-white p-3 rounded-lg shadow-sm" style="border: 1px solid #e6ffe6;"><div class="flex items-center mb-1"><i class="fas fa-exclamation-circle mr-2" style="color: #01a90a;"></i><h3 class="text-base font-medium" style="color: #18391a;">Soporte del Gasto</h3></div><p class="text-gray-700">Para que la deducción sea procedente, el gasto debe estar debidamente soportado en el Documento Soporte de Nómina Electrónica, reportándolo como un pago en especie.</p><p class="text-xs text-gray-500 mt-1 italic">Sustento: Concepto DIAN 106 de 2022.</p></div>
+                            </div>
+                            <div class="w-full md:w-1/2">
+                                <div class="p-4 rounded-lg mb-4" style="background-color: #f0fff0; border: 1px solid #c1f0c1;"><h3 class="text-lg font-semibold mb-2" style="color: #18391a;">Beneficio para el Empleado</h3><p class="text-gray-700 mb-2">La alimentación no constituye ingreso gravado para el trabajador, bajo estas condiciones:</p><ul class="space-y-1 text-gray-700"><li><i class="fas fa-user-check text-xs mr-2" style="color: #01a90a;"></i>El salario del trabajador no debe exceder 310 UVT.</li><li><i class="fas fa-wallet text-xs mr-2" style="color: #01a90a;"></i>El valor exento para el empleado es de hasta 41 UVT mensuales. El exceso sí se considera ingreso gravado.</li></ul><p class="text-xs text-gray-500 mt-2 italic">Sustento: Art. 387-1, Estatuto Tributario.</p></div>
+                                <div class="grid grid-cols-2 gap-4 mb-4">
+                                    <div class="border p-3 rounded-lg hover:shadow-md transition"><div class="flex items-center mb-1"><i class="fas fa-file-signature text-lg mr-2" style="color: #01a90a;"></i><h4 class="font-medium" style="color: #18391a;">Acuerdo Contractual</h4></div><p class="text-sm text-gray-700">Se recomienda incluir el beneficio en el contrato o reglamento como auxilio o salario en especie.</p><p class="text-xs text-gray-500 mt-1 italic">Sustento: Art. 129, C.S.T.</p></div>
+                                    <div class="border p-3 rounded-lg hover:shadow-md transition"><div class="flex items-center mb-1"><i class="fas fa-dollar-sign text-lg mr-2" style="color: #01a90a;"></i><h4 class="font-medium" style="color: #18391a;">Pago a Terceros</h4></div><p class="text-sm text-gray-700">El beneficio aplica tanto si la empresa cocina como si paga a un restaurante o proveedor.</p><p class="text-xs text-gray-500 mt-1 italic">Sustento: Art. 387-1, E.T.</p></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slide-footer">
+                        <div class="footer-logo-area">
+                            <img src="Logo GESCONT transparencia.png" alt="Logo GESCONT" class="footer-logo-img">
+                        </div>
+                        <div class="footer-bar">
+                           <div class="text-xs md:text-sm">
+                                <p class="font-semibold">Elaborado por: 👨🏽‍💻 CP. AUGUSTO CÁRDENAS 📧augustoccardenas@gmail.com ☎️ 321 8168328</p>
+                                <p>Informe generado para Colfrutas S.A.S. | Análisis basado en la normativa vigente.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Diapositiva 4: IVA -->
+            <div id="slide-4" class="slide">
+                <div class="slide-container flex flex-col">
+                    <div class="top-bar-decoration"></div>
+                    <div class="flex flex-col px-8 md:px-16 py-8 flex-grow">
+                        <div class="mb-4"><h1 class="text-4xl font-bold" style="color: #18391a;">Impuesto al Valor Agregado (IVA)</h1><div class="title-accent my-2"></div></div>
+                        <p class="text-lg text-gray-600 mt-1 mb-6">El tratamiento del IVA depende de si el empleado paga o no por la comida.</p>
+                        <div class="flex flex-col md:flex-row justify-between gap-8">
+                            <div class="w-full md:w-1/2 space-y-4">
+                                <h3 class="text-xl font-semibold" style="color: #18391a;">Caso 1: Alimentación Gratuita</h3>
+                                <div class="concept-card bg-white p-3 rounded shadow-sm h-full"><div class="flex items-start"><i class="fas fa-gift text-xl mr-3 pt-1" style="color: #01a90a;"></i><div><h4 class="font-medium" style="color: #18391a;">No se genera IVA</h4><p class="text-sm text-gray-700 mt-1">Si la alimentación se otorga gratis como parte del salario en especie, no hay un "servicio" gravado. Se considera parte de la relación laboral y, por tanto, no causa IVA.</p><p class="text-xs text-gray-500 mt-1 italic">Sustento: Art. 1, Decreto 1372 de 1992.</p></div></div></div>
+                            </div>
+                            <div class="w-full md:w-1/2 space-y-4">
+                                <h3 class="text-xl font-semibold" style="color: #18391a;">Caso 2: Se cobra al empleado</h3>
+                                <div class="concept-card bg-white p-3 rounded shadow-sm h-full"><div class="flex items-start"><i class="fas fa-cash-register text-xl mr-3 pt-1" style="color: #01a90a;"></i><div><h4 class="font-medium" style="color: #18391a;">Operación Gravada con IVA</h4><p class="text-sm text-gray-700 mt-1">Si el empleado paga una parte del almuerzo (ej: mediante descuento de nómina), existe una contraprestación. Esta operación se considera un servicio de restaurante y está gravada con IVA a la tarifa general (19%).</p><p class="text-sm text-gray-700 mt-2 font-semibold">El IVA se calcula sobre el valor cobrado al empleado.</p><p class="text-xs text-gray-500 mt-1 italic">Sustento: Ley 1819 de 2016, Sent. Consejo de Estado Exp. 13646.</p></div></div></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slide-footer">
+                        <div class="footer-logo-area">
+                            <img src="Logo GESCONT transparencia.png" alt="Logo GESCONT" class="footer-logo-img">
+                        </div>
+                        <div class="footer-bar">
+                           <div class="text-xs md:text-sm">
+                                <p class="font-semibold">Elaborado por: 👨🏽‍💻 CP. AUGUSTO CÁRDENAS 📧augustoccardenas@gmail.com ☎️ 321 8168328</p>
+                                <p>Informe generado para Colfrutas S.A.S. | Análisis basado en la normativa vigente.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Diapositiva 5: Obligación de Facturar -->
+            <div id="slide-5" class="slide">
+                <div class="slide-container flex flex-col">
+                    <div class="top-bar-decoration"></div>
+                    <div class="flex flex-col px-8 md:px-16 py-8 flex-grow">
+                        <div class="mb-4"><h1 class="text-4xl font-bold" style="color: #18391a;">Obligación de Facturar</h1><div class="title-accent my-2"></div></div>
+                        <div class="flex flex-col md:flex-row justify-between gap-8">
+                            <div class="w-full md:w-1/2 space-y-4">
+                                <div class="p-3 rounded-lg" style="background-color: #f0fff0; border-left: 4px solid #01a90a;"><h2 class="text-xl font-semibold mb-1" style="color: #18391a;">¿Se debe facturar al empleado?</h2><p class="text-gray-700">Sí. Al ser una prestación de servicios gravada con IVA, la empresa está obligada a expedir una factura electrónica de venta por el valor cobrado a cada trabajador.</p><p class="text-xs text-gray-500 mt-1 italic">Sustento: Art. 615 E.T., Res. DIAN 000042 de 2020.</p></div>
+                                <div><h3 class="text-lg font-medium mb-2" style="color: #01a90a;">Puntos Clave:</h3><ul class="list-disc pl-5 space-y-1 text-gray-700"><li>La relación laboral no exime de facturar una transacción comercial independiente.</li><li>El cobro por el servicio de comedor no es parte del salario, es una venta.</li><li>No facturar implica riesgos fiscales, como el rechazo de costos y sanciones.</li></ul><p class="text-xs text-gray-500 mt-2 italic">Sustento: Art. 616-1 E.T., Sent. Consejo de Estado Exp. 13493.</p></div>
+                            </div>
+                            <div class="w-full md:w-1/2">
+                                <div class="bg-white rounded-lg shadow-md p-4 mb-4">
+                                    <h3 class="text-center font-medium mb-4" style="color: #18391a;">Proceso de Facturación</h3>
+                                    <div class="flex justify-between items-center text-center text-xs">
+                                        <div class="w-1/4"><div class="icon-circle mx-auto mb-1"><i class="fas fa-utensils"></i></div><p>Consumo del empleado</p></div>
+                                        <i class="fas fa-chevron-right text-gray-400"></i>
+                                        <div class="w-1/4"><div class="icon-circle mx-auto mb-1"><i class="fas fa-cash-register"></i></div><p>Cálculo del valor a cobrar</p></div>
+                                        <i class="fas fa-chevron-right text-gray-400"></i>
+                                        <div class="w-1/4"><div class="icon-circle mx-auto mb-1"><i class="fas fa-file-invoice-dollar"></i></div><p>Emisión de Factura Electrónica</p></div>
+                                        <i class="fas fa-chevron-right text-gray-400"></i>
+                                        <div class="w-1/4"><div class="icon-circle mx-auto mb-1"><i class="fas fa-user-tag"></i></div><p>Entrega al empleado</p></div>
+                                    </div>
+                                </div>
+                                <div class="bg-white p-3 rounded shadow" style="border-top: 3px solid #01a90a;"><h4 class="font-medium text-gray-800 text-sm mb-1">Recomendación Práctica</h4><p class="text-xs text-gray-700">Emitir una factura consolidada mensual por empleado, detallando el número de almuerzos y el valor total, con el IVA discriminado.</p><p class="text-xs text-gray-500 mt-1 italic">Sustento: Práctica contable para el cumplimiento de la obligación de facturar.</p></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slide-footer">
+                        <div class="footer-logo-area">
+                            <img src="Logo GESCONT transparencia.png" alt="Logo GESCONT" class="footer-logo-img">
+                        </div>
+                        <div class="footer-bar">
+                           <div class="text-xs md:text-sm">
+                                <p class="font-semibold">Elaborado por: 👨🏽‍💻 CP. AUGUSTO CÁRDENAS 📧augustoccardenas@gmail.com ☎️ 321 8168328</p>
+                                <p>Informe generado para Colfrutas S.A.S. | Análisis basado en la normativa vigente.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Diapositiva 6: Naturaleza del Ingreso -->
+            <div id="slide-6" class="slide">
+                 <div class="slide-container flex flex-col">
+                    <div class="top-bar-decoration"></div>
+                    <div class="flex flex-col px-8 md:px-16 py-8 flex-grow">
+                        <div class="mb-4"><h1 class="text-4xl font-bold" style="color: #18391a;">Naturaleza del Ingreso</h1><div class="title-accent my-2"></div></div>
+                        <div class="flex flex-col md:flex-row justify-between gap-8">
+                            <div class="w-full md:w-1/2 space-y-4">
+                                <div class="p-3 rounded-lg" style="background-color: #e3f9e4;"><h3 class="text-lg font-semibold mb-1" style="color: #18391a;">¿El cobro es un ingreso para la empresa?</h3><p class="text-sm text-gray-700">Sí. El valor que cada empleado paga por su almuerzo constituye un ingreso operacional para la empresa, tanto contable como fiscalmente.</p><p class="text-xs text-gray-500 mt-1 italic">Sustento: Principio de realización contable y fiscal.</p></div>
+                                <div><h3 class="text-lg font-medium mb-2" style="color: #01a90a;">¿Cómo se registra?</h3><p class="text-sm text-gray-700">Se debe registrar en una cuenta de ingresos, por ejemplo, "Otros ingresos operacionales" o "Ingresos por servicios al personal". No debe netearse directamente contra el gasto.</p><p class="text-xs text-gray-500 mt-1 italic">Sustento: Práctica contable para reflejar fielmente la operación (ej. análogo a Cta. 755 PGC Español).</p></div>
+                                <div class="bg-white p-3 rounded-lg shadow-sm"><div class="flex items-center mb-1"><i class="fas fa-exclamation-triangle text-yellow-500 mr-2"></i><h3 class="text-base font-medium text-gray-800">Principio de Asociación</h3></div><p class="text-sm text-gray-700">Se debe mostrar el ingreso por la venta de almuerzos y, por separado, el gasto de los insumos y la preparación. Esto permite asociar correctamente ingresos con sus costos y gastos relacionados.</p><p class="text-xs text-gray-500 mt-1 italic">Sustento: Marco conceptual NIIF.</p></div>
+                            </div>
+                            <div class="w-full md:w-1/2">
+                                <div class="bg-white p-3 rounded-lg shadow-md hover:shadow-lg transition"><div class="flex items-center"><div class="icon-circle mr-3"><i class="fas fa-dollar-sign text-2xl" style="color: #01a90a;"></i></div><div><h4 class="font-medium text-base" style="color: #18391a;">Ingreso Contable</h4><p class="text-gray-700 text-xs">Se reconoce bajo NIIF 15, identificando al empleado como cliente.</p><p class="text-xs text-gray-500 mt-1 italic">Sustento: NIIF 15 - Ingresos de Actividades Ordinarias Procedentes de Contratos con Clientes.</p></div></div></div>
+                                <div class="bg-white p-3 mt-4 rounded-lg shadow-md hover:shadow-lg transition"><div class="flex items-center"><div class="icon-circle mr-3"><i class="fas fa-balance-scale-right text-2xl" style="color: #01a90a;"></i></div><div><h4 class="font-medium text-base" style="color: #18391a;">Ingreso Fiscal</h4><p class="text-gray-700 text-xs">Forma parte de la renta bruta en la declaración de renta.</p><p class="text-xs text-gray-500 mt-1 italic">Sustento: Art. 26, Estatuto Tributario.</p></div></div></div>
+                                <div class="mt-4 bg-gray-50 p-3 rounded-lg border-l-4" style="border-color: #01a90a;"><div class="flex items-start"><i class="fas fa-lightbulb text-yellow-500 text-xl mr-3"></i><div><h4 class="font-medium text-gray-800 text-sm mb-1">Efecto en la Utilidad</h4><p class="text-gray-700 text-xs">Aunque es un ingreso, estará compensado por el costo de los insumos y la preparación. La utilidad neta de esta operación suele ser pequeña o nula, ya que parte del costo es un subsidio al empleado.</p></div></div></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slide-footer">
+                        <div class="footer-logo-area">
+                            <img src="Logo GESCONT transparencia.png" alt="Logo GESCONT" class="footer-logo-img">
+                        </div>
+                        <div class="footer-bar">
+                           <div class="text-xs md:text-sm">
+                                <p class="font-semibold">Elaborado por: 👨🏽‍💻 CP. AUGUSTO CÁRDENAS 📧augustoccardenas@gmail.com ☎️ 321 8168328</p>
+                                <p>Informe generado para Colfrutas S.A.S. | Análisis basado en la normativa vigente.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Diapositiva 7: Ciclo Contable -->
+            <div id="slide-7" class="slide">
+                <div class="slide-container flex flex-col">
+                    <div class="top-bar-decoration"></div>
+                    <div class="flex flex-col px-8 md:px-16 py-8 flex-grow">
+                        <div class="mb-6">
+                            <h1 class="text-3xl font-bold" style="color: #18391a;">Ciclo contable: la forma fiscal y el fondo contable.</h1>
+                            <div class="title-accent my-2"></div>
+                        </div>
+                        
+                        <div class="space-y-2">
+                            <!-- Paso 1: Compra de Insumos -->
+                            <div class="flex items-start space-x-4 p-4 bg-white rounded-lg shadow-sm">
+                                <div class="icon-circle flex-shrink-0 mt-1">
+                                    <i class="fas fa-shopping-basket text-2xl"></i>
+                                </div>
+                                <div class="flex-grow">
+                                    <h4 class="text-lg font-semibold" style="color: #18391a;">1. Compra de Insumos</h4>
+                                    <p class="text-sm text-gray-700 mt-1"><strong class="text-gray-900">Soporte:</strong> Factura Electrónica de Venta del proveedor.</p>
+                                    <p class="text-sm text-gray-700"><strong class="text-gray-900">Normativa:</strong> Art. 107 E.T. (Deducibilidad del costo), Art. 488 E.T. (IVA Descontable).</p>
+                                </div>
+                            </div>
+                            <div class="flex justify-center"><i class="fas fa-arrow-down text-2xl text-gray-300 my-1"></i></div>
+
+                            <!-- Paso 2: Pago Cocinera -->
+                            <div class="flex items-start space-x-4 p-4 bg-white rounded-lg shadow-sm">
+                                <div class="icon-circle flex-shrink-0 mt-1">
+                                    <i class="fas fa-user-tie text-2xl"></i>
+                                </div>
+                                <div class="flex-grow">
+                                    <h4 class="text-lg font-semibold" style="color: #18391a;">2. Pago Cocinera</h4>
+                                    <p class="text-sm text-gray-700 mt-1"><strong class="text-gray-900">Opción A (Vinculada):</strong> Documento Soporte de Nómina Electrónica.</p>
+                                    <p class="text-sm text-gray-700"><strong class="text-gray-900">Opción B (Servicios):</strong> Documento Soporte en Adquisiciones a No Obligados a Facturar.</p>
+                                    <p class="text-sm text-gray-700 mt-1"><strong class="text-gray-900">Normativa:</strong> Art. 107 E.T. (Deducibilidad del gasto laboral/servicio).</p>
+                                </div>
+                            </div>
+                            <div class="flex justify-center"><i class="fas fa-arrow-down text-2xl text-gray-300 my-1"></i></div>
+
+                            <!-- Paso 3: Venta de Almuerzos -->
+                            <div class="flex items-start space-x-4 p-4 bg-white rounded-lg shadow-sm">
+                                <div class="icon-circle flex-shrink-0 mt-1">
+                                    <i class="fas fa-cash-register text-2xl"></i>
+                                </div>
+                                <div class="flex-grow">
+                                    <h4 class="text-lg font-semibold" style="color: #18391a;">3. Venta de Almuerzos al Empleado</h4>
+                                    <p class="text-sm text-gray-700 mt-1"><strong class="text-gray-900">Soporte:</strong> Factura Electrónica de Venta al empleado.</p>
+                                    <p class="text-sm text-gray-700"><strong class="text-gray-900">Normativa:</strong> Art. 615 E.T. (Obligación de facturar), Ley 1819/2016 (IVA en servicios).</p>
+                                </div>
+                            </div>
+                            <div class="flex justify-center"><i class="fas fa-arrow-down text-2xl text-gray-300 my-1"></i></div>
+
+                            <!-- Paso 4: Reconocimiento del Subsidio -->
+                            <div class="flex items-start space-x-4 p-4 bg-white rounded-lg shadow-sm">
+                                <div class="icon-circle flex-shrink-0 mt-1">
+                                    <i class="fas fa-gift text-2xl"></i>
+                                </div>
+                                <div class="flex-grow">
+                                    <h4 class="text-lg font-semibold" style="color: #18391a;">4. Reconocimiento del Subsidio Laboral</h4>
+                                    <p class="text-sm text-gray-700 mt-1"><strong class="text-gray-900">Soporte:</strong> Documento Soporte de Nómina Electrónica (reporte del pago en especie).</p>
+                                    <p class="text-sm text-gray-700"><strong class="text-gray-900">Normativa:</strong> Art. 387-1 E.T. (Ingreso no gravado para trabajador).</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slide-footer">
+                        <div class="footer-logo-area">
+                            <img src="Logo GESCONT transparencia.png" alt="Logo GESCONT" class="footer-logo-img">
+                        </div>
+                        <div class="footer-bar">
+                           <div class="text-xs md:text-sm">
+                                <p class="font-semibold">Elaborado por: 👨🏽‍💻 CP. AUGUSTO CÁRDENAS 📧augustoccardenas@gmail.com ☎️ 321 8168328</p>
+                                <p>Informe generado para Colfrutas S.A.S. | Análisis basado en la normativa vigente.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Diapositiva 8: Ejercicio práctico -->
+            <div id="slide-8" class="slide">
+                <div class="slide-container flex flex-col">
+                    <div class="top-bar-decoration"></div>
+                    <div class="flex flex-col px-8 md:px-16 py-8 flex-grow">
+                        <div class="mb-4">
+                            <h1 class="text-3xl font-bold" style="color: #18391a;">Ejercicio práctico</h1>
+                            <div class="title-accent my-2"></div>
+                        </div>
+                        <div class="flex flex-col lg:flex-row gap-6">
+                            <!-- Columna de Datos -->
+                            <div class="w-full lg:w-1/3">
+                                <div class="bg-white p-4 rounded-lg shadow-md space-y-2">
+                                    <h3 class="text-lg font-semibold text-center" style="color: #18391a;">Situación: Alimentación en Colfrutas</h3>
+                                    <div class="flex justify-between text-sm"><span class="font-medium">Compra insumos:</span> <span>$4.500.000</span></div>
+                                    <div class="flex justify-between text-sm"><span class="font-medium">Pago cocinera:</span> <span>$1.500.000</span></div>
+                                    <hr>
+                                    <div class="flex justify-between text-sm font-bold"><span class="text-green-700">Total Gasto Mensual:</span> <span class="text-green-700">$6.000.000</span></div>
+                                    <hr>
+                                    <div class="flex justify-between text-sm"><span class="font-medium">Total almuerzos:</span> <span>400</span></div>
+                                    <div class="flex justify-between text-sm"><span class="font-medium">Costo por almuerzo:</span> <span>$15.000</span></div>
+                                    <div class="flex justify-between text-sm"><span class="font-medium">Ingreso por venta:</span> <span>$5.500</span></div>
+                                    <div class="flex justify-between text-sm font-bold"><span class="text-red-700">Subsidio por almuerzo:</span> <span class="text-red-700">$9.500</span></div>
+                                    <hr>
+                                    <div class="flex justify-between text-sm"><span class="font-medium">Total venta (Base):</span> <span>$1.848.739</span></div>
+                                    <div class="flex justify-between text-sm"><span class="font-medium">Total IVA (19%):</span> <span>$351.261</span></div>
+                                    <div class="flex justify-between text-sm font-bold"><span class="text-blue-700">Total Facturado:</span> <span class="text-blue-700">$2.200.000</span></div>
+                                    <div class="flex justify-between text-sm font-bold"><span class="text-red-700">Total Subsidiado:</span> <span class="text-red-700">$3.800.000</span></div>
+                                </div>
+                            </div>
+                            <!-- Columna de Asientos Contables -->
+                            <div class="w-full lg:w-2/3">
+                                <div class="bg-white rounded-lg shadow p-3 space-y-3 overflow-x-auto">
+                                    <div class="mb-2">
+                                        <div class="bg-green-100 p-2 text-green-800 font-medium rounded-t-md text-sm">1. Registro del Costo Total</div>
+                                        <table class="w-full text-sm"><thead><tr class="table-header"><th class="p-2 text-left">Cuenta</th><th class="p-2 text-right">Débito</th><th class="p-2 text-right">Crédito</th></tr></thead><tbody class="text-xs"><tr><td class="p-2 border-b">51/52 - Gasto Alimentación</td><td class="p-2 text-right border-b">$6.000.000</td><td class="p-2 border-b"></td></tr><tr><td class="p-2">22/23/25 - Cuentas por Pagar</td><td class="p-2 text-right"></td><td class="p-2 text-right">$6.000.000</td></tr></tbody></table>
+                                    </div>
+                                    <div class="mb-2">
+                                        <div class="bg-green-100 p-2 text-green-800 font-medium rounded-t-md text-sm">2. Facturación a Empleados</div>
+                                        <table class="w-full text-sm"><thead><tr class="table-header"><th class="p-2 text-left">Cuenta</th><th class="p-2 text-right">Débito</th><th class="p-2 text-right">Crédito</th></tr></thead><tbody class="text-xs"><tr><td class="p-2 border-b">1305 - Cuentas por Cobrar Empleados</td><td class="p-2 text-right border-b">$2.200.000</td><td class="p-2 border-b"></td></tr><tr><td class="p-2 border-b">4295 - Ingresos Diversos (Alimentación)</td><td class="p-2 text-right border-b"></td><td class="p-2 text-right border-b">$1.848.739</td></tr><tr><td class="p-2">2408 - IVA Generado</td><td class="p-2 text-right"></td><td class="p-2 text-right">$351.261</td></tr></tbody></table>
+                                    </div>
+                                    <div>
+                                        <div class="bg-green-100 p-2 text-green-800 font-medium rounded-t-md text-sm">3. Reclasificación del Subsidio (Para Nómina)</div>
+                                        <table class="w-full text-sm"><thead><tr class="table-header"><th class="p-2 text-left">Cuenta</th><th class="p-2 text-right">Débito</th><th class="p-2 text-right">Crédito</th></tr></thead><tbody class="text-xs"><tr><td class="p-2 border-b">51/52 - Gasto Salario en Especie</td><td class="p-2 text-right border-b">$3.800.000</td><td class="p-2 border-b"></td></tr><tr><td class="p-2">51/52 - Gasto Alimentación (Cr)</td><td class="p-2 text-right"></td><td class="p-2 text-right">$3.800.000</td></tr></tbody></table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slide-footer">
+                        <div class="footer-logo-area">
+                            <img src="Logo GESCONT transparencia.png" alt="Logo GESCONT" class="footer-logo-img">
+                        </div>
+                        <div class="footer-bar">
+                           <div class="text-xs md:text-sm">
+                                <p class="font-semibold">Elaborado por: 👨🏽‍💻 CP. AUGUSTO CÁRDENAS 📧augustoccardenas@gmail.com ☎️ 321 8168328</p>
+                                <p>Informe generado para Colfrutas S.A.S. | Análisis basado en la normativa vigente.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Diapositiva 9: Conclusiones -->
+            <div id="slide-9" class="slide">
+                <div class="slide-container flex flex-col">
+                    <div class="top-bar-decoration"></div>
+                    <div class="flex flex-col px-8 md:px-16 py-8 flex-grow">
+                        <div class="mb-4"><h1 class="text-3xl font-bold" style="color: #18391a;">Conclusiones y Recomendaciones</h1><div class="title-accent my-2"></div></div>
+                        <div class="flex flex-col md:flex-row justify-between gap-8">
+                            <div class="w-full md:w-1/2 space-y-4">
+                                <h2 class="text-xl font-semibold" style="color: #18391a;">Conclusiones Clave</h2>
+                                <div class="bg-white p-3 rounded-lg shadow-sm"><div class="flex items-center mb-1"><div class="icon-circle"><i class="fas fa-check-circle text-xl"></i></div><h3 class="text-base font-medium">Gasto Deducible</h3></div><p class="text-sm text-gray-700 ml-14">El costo total de la alimentación es un gasto deducible para la empresa.</p><p class="text-xs text-gray-500 ml-14 mt-1 italic">Sustento: Art. 107 y 387-1 E.T.</p></div>
+                                <div class="bg-white p-3 rounded-lg shadow-sm"><div class="flex items-center mb-1"><div class="icon-circle"><i class="fas fa-receipt text-xl"></i></div><h3 class="text-base font-medium">Operación Gravada</h3></div><p class="text-sm text-gray-700 ml-14">Si se cobra al empleado, es un servicio gravado con IVA que requiere facturación.</p><p class="text-xs text-gray-500 ml-14 mt-1 italic">Sustento: Ley 1819/2016, Art. 615 E.T.</p></div>
+                                <div class="bg-white p-3 rounded-lg shadow-sm"><div class="flex items-center mb-1"><div class="icon-circle"><i class="fas fa-chart-pie text-xl"></i></div><h3 class="text-base font-medium">Ingreso y Gasto</h3></div><p class="text-sm text-gray-700 ml-14">El cobro es un ingreso y los costos son un gasto. Deben registrarse por separado.</p><p class="text-xs text-gray-500 ml-14 mt-1 italic">Sustento: NIIF 15, Principio de Asociación.</p></div>
+                            </div>
+                            <div class="w-full md:w-1/2 space-y-3">
+                                <h2 class="text-xl font-semibold" style="color: #18391a;">Recomendaciones Prácticas</h2>
+                                <div class="border-l-4 border-green-500 bg-white p-3 rounded shadow-sm"><h3 class="text-base font-medium mb-1" style="color: #01a90a;">Documentar el Beneficio</h3><p class="text-sm text-gray-700">Incluir la política de alimentación en el contrato de trabajo o reglamento interno.</p><p class="text-xs text-gray-500 mt-1 italic">Sustento: Art. 129 C.S.T.</p></div>
+                                <div class="border-l-4 border-green-500 bg-white p-3 rounded shadow-sm"><h3 class="text-base font-medium mb-1" style="color: #01a90a;">Facturación Mensual</h3><p class="text-sm text-gray-700">Implementar un proceso para facturar mensualmente a los empleados por los consumos.</p><p class="text-xs text-gray-500 mt-1 italic">Sustento: Art. 615 E.T., Res. DIAN 000042 de 2020.</p></div>
+                                <div class="border-l-4 border-green-500 bg-white p-3 rounded shadow-sm"><h3 class="text-base font-medium mb-1" style="color: #01a90a;">Control Contable</h3><p class="text-sm text-gray-700">Crear cuentas contables específicas para controlar los ingresos y gastos de esta operación.</p><p class="text-xs text-gray-500 mt-1 italic">Sustento: Principio de imagen fiel y control interno.</p></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slide-footer">
+                        <div class="footer-logo-area">
+                            <img src="Logo GESCONT transparencia.png" alt="Logo GESCONT" class="footer-logo-img">
+                        </div>
+                        <div class="footer-bar">
+                           <div class="text-xs md:text-sm">
+                                <p class="font-semibold">Elaborado por: 👨🏽‍💻 CP. AUGUSTO CÁRDENAS 📧augustoccardenas@gmail.com ☎️ 321 8168328</p>
+                                <p>Informe generado para Colfrutas S.A.S. | Análisis basado en la normativa vigente.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const slides = document.querySelectorAll('.slide');
+
+            function showSlide(slideId) {
+                // Ocultar todas las diapositivas
+                slides.forEach(slide => {
+                    slide.classList.remove('active');
+                });
+
+                // Quitar clase activa de todos los enlaces
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                });
+
+                // Mostrar la diapositiva seleccionada
+                const targetSlide = document.getElementById(slideId);
+                if (targetSlide) {
+                    targetSlide.classList.add('active');
+                }
+
+                // Añadir clase activa al enlace correspondiente
+                const targetLink = document.querySelector(`.nav-link[data-slide="${slideId}"]`);
+                if (targetLink) {
+                    targetLink.classList.add('active');
+                }
+            }
+
+            // Añadir event listeners a los enlaces de navegación
+            navLinks.forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const slideId = this.getAttribute('data-slide');
+                    showSlide(slideId);
+                });
+            });
+
+            // Mostrar la primera diapositiva por defecto
+            showSlide('slide-1');
+        });
+    </script>
+
+</body>
+</html>
+ 
